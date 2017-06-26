@@ -107,8 +107,7 @@ module VPK
           @@logger.info "try to read #{entry.full_path} (#{entry.entry_length} bytes)"
           entry.read_payload(io, end_of_header + @header.directory_length)
           unless entry.valid?
-            @@logger.error "crc is invalid: @entry.payload:#{Zlib.crc32(entry.payload)} != @crc:#{entry.crc.inspect}"
-            raise VPKFileInvalidCRCError
+            @@logger.warn "crc is invalid: @entry.payload:#{Zlib.crc32(entry.payload)} != @crc:#{entry.crc.inspect}"
           end
           @@logger.info "done"
         end
@@ -327,5 +326,4 @@ module VPK
 
   class VPKError < StandardError; end
   class VPKFileFormatError < VPKError; end
-  class VPKFileInvalidCRCError < VPKError; end
 end
